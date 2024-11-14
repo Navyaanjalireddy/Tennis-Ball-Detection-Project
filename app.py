@@ -3,12 +3,12 @@ import cv2
 import torch
 from pathlib import Path
 import tempfile
-import sys
 import pathlib
-from pathlib import Path
-pathlib.PosixPath = pathlib.WindowsPath
 from tqdm import tqdm
 import numpy as np
+
+# Set pathlib workaround for compatibility on Streamlit Cloud if necessary
+pathlib.PosixPath = pathlib.WindowsPath
 
 # Function to plot one bounding box on the image
 def plot_one_box(xyxy, img, color=(255, 0, 0), label=None, line_thickness=2):
@@ -50,16 +50,14 @@ if uploaded_video:
         # Progress bar
         progress_bar = st.progress(0)
 
-        # Load YOLOv5 model directly using torch.hub.load
-        model_weights_path = 'runs/train/exp/weights/best.pt'
-
-        # Make sure to run the model loading in your environment with 'yolov5' available
-        model = torch.hub.load('yolov5', 'custom', path=model_weights_path, source='local')
+        # Load YOLOv5 model
+        model_weights_path = 'runs/train/exp/best.pt'  # Ensure 'best.pt' is in the same directory or adjust this path
+        model = torch.hub.load('ultralytics/yolov5', 'custom', path=model_weights_path, source='local')
 
         # Set model to evaluation mode
         model.eval()
 
-        # Process each frame
+        # Proc
         for i in tqdm(range(total_frames)):
             ret, frame = cap.read()
             if not ret:

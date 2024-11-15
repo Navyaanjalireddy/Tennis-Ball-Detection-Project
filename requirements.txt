@@ -8,4 +8,4 @@ Pillow
 matplotlib
 requests
 scipy
-tourchvision
+torchvision
